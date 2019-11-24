@@ -1,9 +1,9 @@
-from tensorflow.examples.tutorials.mnist import input_data
 import numpy as np
+from tensorflow.examples.tutorials.mnist import input_data
 
 def load_data(mode='train', loss='categorical_crossentropy'):
     """
-    Function to load the MNIST data from tensorflow
+    Use to load the MNIST data from tensorflow
     :param mode: train of test
     :param loss: loss parameter when compile model
     :return: images and labels
@@ -26,7 +26,7 @@ def load_data(mode='train', loss='categorical_crossentropy'):
 
 def reformat(x, num_of_channel=1):
     """
-    Function to reformat the data then it can be used by convolutional layers
+    Use to reformat the data then it can be used by convolutional layers
     :param x: input array of images
     :return: reshaped input images
     """
