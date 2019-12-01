@@ -166,6 +166,21 @@ def handle_layer(input, layer, weights, index_of_weight):
     return predicted_output, index_of_weight
 
 
+def feed_forward(input, layers, weights):
+    """
+    use to calculate forward computation
+    :param input: a matrix with 4-dimensions n x height x width x depth
+    :param layers: layers of model
+    :param weights: weights of model
+    :return: the output of the forward computation, shape = (n, 10)
+    """
+    output = input
+    index_of_weight = 0
+    for index in range(len(layers)):
+        output, index_of_weight = handle_layer(output, layers[index], weights, index_of_weight)
+    return output
+
+
 def predict(input, layers, weights):
     """
     use to predict output
@@ -174,8 +189,5 @@ def predict(input, layers, weights):
     :param weights: weights of model after training
     :return: predicted the output of model, shape = (n, 10)
     """
-    predicted_output = input
-    index_of_weight = 0
-    for index in range(len(layers)):
-        predicted_output, index_of_weight = handle_layer(predicted_output, layers[index], weights, index_of_weight)
+    predicted_output = feed_forward(input, layers, weights)
     return predicted_output
