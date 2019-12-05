@@ -1,47 +1,49 @@
-import numpy as np
-from tensorflow.keras import datasets, layers, models
-from Helper import LoadMNISTData as MNIST
-from Helper import Prediction
+from Helper import LoadData, SupportFunctions
 
+# =====> MNIST <=====
 # load data
-x_train, y_train, x_validation, y_validation = MNIST.load_data('train')  # 55000x28x28x1, 55000x10, 5000x28x28x1, 5000x10
-x_test, y_test = MNIST.load_data('test')  # 10000x28x28x1, 10000x10
+#x_train, y_train, x_validation, y_validation = LoadData.load_data_MNIST('train')  # 55000x28x28x1, 55000x10, 5000x28x28x1, 5000x10
+#x_test, y_test = LoadData.load_data_MNIST('test')  # 10000x28x28x1, 10000x10
 
-# create the network layers
-model = models.Sequential()
-model.add(layers.Conv2D(32, (3, 3), activation='relu', input_shape=(28, 28, 1), padding='SAME'))
-model.add(layers.MaxPooling2D(2, 2))
-model.add(layers.Conv2D(64, (3, 3), activation='relu', padding='SAME'))
-model.add(layers.MaxPooling2D(2, 2))
-model.add(layers.Flatten())
-model.add(layers.Dense(64, activation="relu"))
-#model.add(layers.Dropout(0.2))  # Dropout to combat overfitting in neural networks
-model.add(layers.Dense(10, activation="softmax"))
-#model.build()
-model.summary()
+#file_name_without_L2 = 'saved_model.h5'
+#file_name_with_L2 = 'saved_model_regularization.h5'
+#images_indexes = [1, 1232]
 
-# train the model
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-history = model.fit(x_train, y_train, batch_size=1024, epochs=2, validation_data=(x_validation, y_validation))
+# train model
+#SupportFunctions.training_model('MNIST', x_train, y_train, x_validation, y_validation, x_test, y_test, file_name_without_L2, False)
+#SupportFunctions.training_model('MNIST', x_train, y_train, x_validation, y_validation, x_test, y_test, file_name_with_L2, True)
+# check my feed forward
+#SupportFunctions.check_my_feed_forward(file_name_without_L2, x_test, y_test)
+# show histogram of layers
+#SupportFunctions.show_histogram_of_layers(file_name_without_L2)
+#SupportFunctions.show_histogram_of_layers(file_name_with_L2)
+# show incorrect images
+#SupportFunctions.show_incorrect_correct_images('MNIST', file_name_without_L2, x_test, y_test, 'Images/MNIST/Incorrect_Images', 'Images/MNIST/Correct_Images')
+# show visualized feature maps
+#SupportFunctions.show_feature_maps(file_name_without_L2, x_test, images_indexes, 2, 'Images/MNIST/Visualized_Feature_Maps')
 
-# evaluate model
-loss_result, accuracy_result = model.evaluate(x_test, y_test)
-print('Testing Loss is {}'.format(loss_result))
-print('Testing Accuracy is {}'.format(accuracy_result))
 
-# get weights
-weights = model.get_weights()
+# =====> CIFAR <=====
+# load data
+x_train, y_train, x_validation, y_validation, x_test, y_test = LoadData.load_data_CIFAR('cifar-10-python/cifar-10-batches-py')
 
-# predict output
-print('==========> Prediction <==========')
-tmp_x_test = np.array([x_test[100]])
-predicted_output = model.predict(tmp_x_test)
-print('model predict: ', predicted_output)
+file_name_without_L2 = 'saved_model_CIFAR.h5'
+file_name_with_L2 = 'saved_model_CIFAR_regularization.h5'
+images_indexes = [1, 3]
 
-my_predicted_output = Prediction.predict(tmp_x_test, model.layers, weights)
-print('my predict: ', my_predicted_output)
+# train model
+#SupportFunctions.training_model('CIFAR', x_train, y_train, x_validation, y_validation, x_test, y_test, file_name_without_L2, False, 2)
+#SupportFunctions.training_model('CIFAR', x_train, y_train, x_validation, y_validation, x_test, y_test, file_name_with_L2, True, 2)
 
-print('==========> One hot vector <==========')
-print('label of output: ', np.array([y_test[100]]))
-print('model predict: ', np.round(predicted_output))
-print('my predict: ', np.round(my_predicted_output))
+# check my feed forward
+#SupportFunctions.check_my_feed_forward(file_name_without_L2, x_test, y_test)
+
+# show histogram of layers
+#SupportFunctions.show_histogram_of_layers(file_name_without_L2)
+#SupportFunctions.show_histogram_of_layers(file_name_with_L2)
+
+# show incorrect images
+#SupportFunctions.show_incorrect_correct_images(file_name_without_L2, x_test, y_test, 'Images/CIFAR/Incorrect_Images', 'Images/CIFAR/Correct_Images')
+
+# show visualized feature maps
+SupportFunctions.show_feature_maps(file_name_without_L2, x_test, images_indexes, 2, 'Images/CIFAR/Visualized_Feature_Maps')
